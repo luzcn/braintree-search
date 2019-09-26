@@ -1,4 +1,4 @@
-import braintree, os
+import braintree, os, json
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
@@ -11,12 +11,21 @@ gateway = braintree.BraintreeGateway(
 
 
 def search(verification_id):
+    if verification_id is None:
+        return []
+
     collection = gateway.verification.search(
         braintree.CreditCardVerificationSearch.id == verification_id
     )
 
+    res = []
     for verification in collection.items:
-        print(verification)
+        if verification.risk_data:
+            res.append({'status': verification.status,
+                        'risk_data': {'id': verification.risk_data.id,
+                                      'decision': verification.risk_data.decision}
+                        })
+        else:
+            res.append({'status': verification.status})
 
-
-search("")
+    return res
