@@ -10,13 +10,13 @@ gateway = braintree.BraintreeGateway(
 )
 
 
-def search():
+def search(verification_id):
     collection = gateway.verification.search(
-        braintree.CreditCardVerificationSearch.id == "sdf"
+        braintree.CreditCardVerificationSearch.id == verification_id
     )
 
     for verification in collection.items:
-        print(verification.status)
+        print(verification)
 
 
-search()
+search("")
