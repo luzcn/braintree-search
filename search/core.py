@@ -1,4 +1,6 @@
-import braintree, os, json
+import braintree
+import os
+import json
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
@@ -22,10 +24,13 @@ def search(verification_id):
     for verification in collection.items:
         if verification.risk_data:
             res.append({'status': verification.status,
+                        'created_at': verification.created_at,
                         'risk_data': {'id': verification.risk_data.id,
                                       'decision': verification.risk_data.decision}
                         })
         else:
-            res.append({'status': verification.status})
+            res.append({'status': verification.status,
+                        'created_at': verification.created_at,
+                        'risk_data': 'null'})
 
     return res
